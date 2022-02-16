@@ -26,14 +26,16 @@ require __DIR__ . '/../vendor/autoload.php';
 error_reporting(E_ALL); //すべてのPHPエラーを表示(-1)でも良いらしいが、互換性的に名前付き定数が推奨されている
 date_default_timezone_set('Asia/Tokyo');
 
-$container = (include __DIR__ . '/../app/di.php');
-$container->get(WhoopsInterface::class)->register();
+$container = (include __DIR__ . '/../app/di.php'); //これは何を変数に入れてる？
+$container->get(WhoopsInterface::class)->register(); //interfaceをdiで注入してる
 
 $server_request = $container->get(ServerRequest::class);
+//コマンドライン以外から起動された場合&&ファイルがある時は終了
 if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . $server_request->getUri()->getPath())) {
     return false;
 }
 
+//psr17でpsr15に通せるやつを作る
 $http = $container->get(Psr17Factory::class);
 $router = $container->get(RouterContainer::class);
 
