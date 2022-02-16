@@ -23,7 +23,7 @@ use const PHP_VERSION;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-error_reporting(E_ALL);
+error_reporting(E_ALL); //すべてのPHPエラーを表示(-1)でも良いらしいが、互換性的に名前付き定数が推奨されている
 date_default_timezone_set('Asia/Tokyo');
 
 $container = (include __DIR__ . '/../app/di.php');
@@ -38,13 +38,13 @@ $http = $container->get(Psr17Factory::class);
 $router = $container->get(RouterContainer::class);
 
 $_404 = fn (ResponseFactory $factory, StreamFactory $stream, View\HtmlFactory $html): HttpResponse
-    => $factory->createResponse(404)->withBody($stream->createStream($html('404', [])));
+=> $factory->createResponse(404)->withBody($stream->createStream($html('404', [])));
 
 /** @var array<Closure|MiddlewareInterface> */
 $queue = [];
 
 $queue[] = fn (ServerRequest $request, RequestHandler $handler): HttpResponse
-    => $handler->handle($request)->withHeader('X-Powered-By', 'PHP/' . PHP_VERSION)->withHeader('X-Robots-Tag', 'noindex');
+=> $handler->handle($request)->withHeader('X-Powered-By', 'PHP/' . PHP_VERSION)->withHeader('X-Robots-Tag', 'noindex');
 $queue[] = new IpAddress();
 $queue[] = $container->get(Http\Dispatcher::class);
 $queue[] = $container->get(Http\SessionSetter::class);
@@ -63,9 +63,9 @@ $queue[] = function (ServerRequest $request, RequestHandler $handler) use ($http
 };
 
 $queue[] = fn (ServerRequest $request): HttpResponse
-    => $container->call($router->getMatcher()->match($request)->handler ?? $_404, [
-        'request' => $request,
-    ]);
+=> $container->call($router->getMatcher()->match($request)->handler ?? $_404, [
+    'request' => $request,
+]);
 
 $relay = new Relay($queue);
 $response = $relay->handle($server_request);

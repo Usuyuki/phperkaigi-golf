@@ -53,10 +53,20 @@ use Twig\TwigFunction;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run as Whoops;
 use Whoops\RunInterface as WhoopsInterface;
+//関数インポート
+//依存性注入という意味でのDI?
+//phpdiのnamespaceでDIがあった
+/**
+ * composerのautoload_psr4.phpにて
+ * 'DI\\' => array($vendorDir . '/php-di/php-di/src'),
+ * で対応している
+ */
+//    
 use function DI\autowire;
 use function DI\create;
 use function DI\factory;
 use function DI\get;
+//useの量がえげつない……
 
 $builder = new DI\ContainerBuilder();
 // $builder->enableCompilation(__DIR__ . '/../cache');
