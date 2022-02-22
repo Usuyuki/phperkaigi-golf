@@ -17,10 +17,13 @@ use Psr\Http\Message\ServerRequestInterface as ServerRequest;
 use Psr\Http\Message\StreamFactoryInterface as StreamFactory;
 use RandomLib\Generator as RandomGenerator;
 
+/**
+ * ログイン関連のクラス　これもシングルアクション系
+ */
 final class LoginAction
 {
     private const PASSWORD_CHARS =
-        'abcdefghijklmnopqrstuvwxyz' .
+    'abcdefghijklmnopqrstuvwxyz' .
         'ABCDEFGHIJKLMNOPQRSQUVWXYZ' .
         '0123456789-_#!$%&+@';
 

@@ -13,6 +13,9 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 
+/**
+ * ディスパッチするクラス
+ */
 final class Dispatcher implements MiddlewareInterface
 {
     private bool $is_production;
@@ -32,6 +35,8 @@ final class Dispatcher implements MiddlewareInterface
         $this->html_factory = $html_factory;
     }
 
+    //めちゃくちゃPSR
+    //HTTPレスポンスを返す
     public function process(
         ServerRequestInterface $request,
         RequestHandlerInterface $handler

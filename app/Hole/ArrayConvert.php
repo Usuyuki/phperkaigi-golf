@@ -49,6 +49,8 @@ echo json_encode($converter($input));
 PHP;
     }
 
+    //セッターとかゲッターまわり
+
     public function getStdin(): ?string
     {
         return self::STDIN_STR;

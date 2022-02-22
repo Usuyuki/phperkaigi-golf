@@ -20,6 +20,13 @@ use function Safe\json_encode;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
+
+// これ以上継承できないようにfinal
+//JWT→JSON Web Token
+
+/**
+ * クッキーで認証関連を扱うクラス
+ */
 final class CookieJwtSession implements SessionStorage
 {
     private const COOKIE_LIFETIME_OFFSET = 60 * 60 * 24 * 30;
@@ -34,6 +41,7 @@ final class CookieJwtSession implements SessionStorage
     private JoseSerializer $serializer;
     private Session $session;
 
+    //インスタンス化のときに実行
     public function __construct(
         JoseSerializer $serializer,
         JWK $jwk,
@@ -54,14 +62,17 @@ final class CookieJwtSession implements SessionStorage
         $this->cookie_name = $cookie_name;
     }
 
+    //JWS→JSON Web Signature
     /**
      * @return array{accepted_terms?:bool,id?:int,name?:string}
      */
     private function fetchJws(string $token): array
     {
         try {
+            //与えられたキーで認証する
             $jws = $this->jws_loader->loadAndVerifyWithKey($token, $this->jwk, $_);
         } catch (Exception $e) {
+            //エラーが意図したものでなかったら空配列
             if ($e->getMessage() !== 'Unable to load and verify the token.') {
                 throw $e;
             }
@@ -69,13 +80,15 @@ final class CookieJwtSession implements SessionStorage
             return [];
         }
 
-        return json_decode($jws->getPayload() ?? '', true);
+        return json_decode($jws->getPayload() ?? '', true); //jsonを展開したものを返す
     }
 
     public function fromRequest(ServerRequest $request): self
     {
+        //cookieを取得、スーパーグローバールを使っていないのはテストなどで事故るからだと思われる
         $cookies = $request->getCookieParams();
 
+        //クッキーあればその情報引っ張り出す
         if (isset($cookies[$this->cookie_name])) {
             $data = $this->fetchJws($cookies[$this->cookie_name]);
         } else {
@@ -114,6 +127,6 @@ final class CookieJwtSession implements SessionStorage
             'expires' => $this->now->timestamp + self::COOKIE_LIFETIME_OFFSET,
         ]);
 
-        return $this->oven->appendTo($response);
+        return $this->oven->appendTo($response); //psr7準拠のクッキー追加系の処理
     }
 }

@@ -21,8 +21,11 @@ final class HtmlFactory
      */
     public function __invoke(string $name, array $params): string
     {
+        //初期化した→セッション入手
         $session = $this->session_storage->initialized() ? $this->session_storage->getSession() : null;
 
+
+        //ここで該当するtwigテンプレートをレンダリングして返している
         return $this->twig->render("{$name}.html.twig", [
             'session' => $session,
         ] + $params);

@@ -52,3 +52,33 @@ $二乗した値=fn($x) => $x * 2;
 
 
 ```
+
+# DataSouth\MySQL
+
+- Error
+  - ErrorRow
+  - ErrorTable
+- Password
+  - PasswordRow
+  - PasswordTable
+- Player
+  - PlayerRow
+  - PlayerTable
+
+# Hole
+
+問題コーナー
+
+-
+
+# Http
+
+# tpl
+
+twig template
+
+# schema
+
+マイグレーション的な
+
+> scheme→ 構造という意味

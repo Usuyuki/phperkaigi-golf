@@ -16,6 +16,9 @@ use function ob_start;
 use function phpinfo;
 use function safe\file_get_contents;
 
+/**
+ * ルーティング
+ */
 $router = new RouterContainer();
 $map = $router->getMap();
 
@@ -23,8 +26,8 @@ $map->get('index', '/', fn (
     ResponseFactory $factory,
     StreamFactory $stream,
     View\HtmlFactory $html
-): HttpResponse => $factory->createResponse()->withBody($stream->createStream($html('index', [
-]))));
+): HttpResponse => $factory->createResponse()->withBody($stream->createStream($html('index', []))));
+//ストリーム→入出力を扱う機能
 
 $map->get('terms', '/terms', fn (
     ResponseFactory $factory,

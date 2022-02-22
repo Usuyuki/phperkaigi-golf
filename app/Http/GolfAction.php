@@ -32,6 +32,9 @@ use function inet_pton;
 use function is_string;
 use function strtr;
 
+/**
+ * PHPGolf本体 シングルアクションコントローラー的なもの
+ */
 final class GolfAction
 {
     private const REASON_NOT_MATCH_OUTPUT = 'not_match_output';

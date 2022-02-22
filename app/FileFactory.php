@@ -7,6 +7,7 @@ namespace Playground\Web;
 use Closure;
 use Playground\File;
 
+//Clousureをuseしている？？
 final class FileFactory
 {
     private Closure $filename_generator;

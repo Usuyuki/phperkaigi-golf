@@ -6,6 +6,10 @@ namespace Playground\Web;
 
 use JsonSerializable;
 
+/**
+ * セッションまわり
+ * 利用規約の同意とか
+ */
 final class Session implements JsonSerializable
 {
     public bool $accepted_terms;

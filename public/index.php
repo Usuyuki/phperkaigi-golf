@@ -37,6 +37,7 @@ if (PHP_SAPI === 'cli-server' && is_file(__DIR__ . $server_request->getUri()->ge
 
 //psr17でpsr15に通せるやつを作る
 $http = $container->get(Psr17Factory::class);
+//A library-specific container.↓とは？？？
 $router = $container->get(RouterContainer::class);
 
 $_404 = fn (ResponseFactory $factory, StreamFactory $stream, View\HtmlFactory $html): HttpResponse
@@ -50,25 +51,30 @@ $queue[] = fn (ServerRequest $request, RequestHandler $handler): HttpResponse
 $queue[] = new IpAddress();
 $queue[] = $container->get(Http\Dispatcher::class);
 $queue[] = $container->get(Http\SessionSetter::class);
+
+//クロージャー
 $queue[] = function (ServerRequest $request, RequestHandler $handler) use ($http, $router): HttpResponse {
     $session = $request->getAttribute('session');
 
     $uri = $request->getUri()->getPath();
 
+    // 利用規約とかログイン周りじゃなくかつ、ログインしてなかったら
     if (!in_array($uri, ['/', '/terms', '/login', '/phpinfo.php'], true) && !$session->isLoggedIn()) {
         $gen = $router->getGenerator();
 
-        return $http->createResponse(302)->withHeader('Location', $gen->generate('terms'));
+        return $http->createResponse(302)->withHeader('Location', $gen->generate('terms')); //利用規約に飛ばす
     }
 
     return $handler->handle($request);
 };
 
+//psrに則ったやつ
 $queue[] = fn (ServerRequest $request): HttpResponse
 => $container->call($router->getMatcher()->match($request)->handler ?? $_404, [
     'request' => $request,
 ]);
 
+//psr15ハンドラ
 $relay = new Relay($queue);
 $response = $relay->handle($server_request);
 
