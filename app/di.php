@@ -62,7 +62,7 @@ use Whoops\RunInterface as WhoopsInterface;
  * で対応している
  */
 //    
-use function DI\autowire;
+use function DI\autowire; //インスタンス化自動で行う
 use function DI\create;
 use function DI\factory;
 use function DI\get;
@@ -75,8 +75,9 @@ $builder->addDefinitions((include __DIR__ . '/../config.php') + [
     Atlas::class => factory(function (Container $c) {
         $config = $c->get('atlas');
 
-        return Atlas::new(...$config['pdo']);
+        return Atlas::new(...$config['pdo']); //index.php→di周りのファイル20個→ここ
     }),
+    //イミュータブルな時関係のオブジェクト
     Chronos::class => factory(function (): Chronos {
         return Chronos::now();
     }),

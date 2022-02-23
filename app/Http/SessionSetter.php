@@ -38,6 +38,6 @@ final class SessionSetter implements MiddlewareInterface
 
         $request = $request->withAttribute('session', $session);
 
-        return $this->session_storage->writeTo($handler->handle($request));
+        return $this->session_storage->writeTo($handler->handle($request)); //セッションセット
     }
 }

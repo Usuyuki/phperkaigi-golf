@@ -38,11 +38,13 @@ final class Dispatcher implements MiddlewareInterface
     //めちゃくちゃPSR
     //HTTPレスポンスを返す
     public function process(
+        //DI
         ServerRequestInterface $request,
         RequestHandlerInterface $handler
     ): HttpResponse {
         try {
-            return $handler->handle($request);
+            return $handler->handle($request); //ここ通る
+            //この前にディスパッチャプロセスやIPアドレス周りの処理が行われている
         } catch (Throwable $e) {
             if (!$this->is_production) {
                 throw $e;

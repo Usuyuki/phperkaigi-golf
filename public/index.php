@@ -46,6 +46,7 @@ $_404 = fn (ResponseFactory $factory, StreamFactory $stream, View\HtmlFactory $h
 /** @var array<Closure|MiddlewareInterface> */
 $queue = [];
 
+//PHPバージョン出力
 $queue[] = fn (ServerRequest $request, RequestHandler $handler): HttpResponse
 => $handler->handle($request)->withHeader('X-Powered-By', 'PHP/' . PHP_VERSION)->withHeader('X-Robots-Tag', 'noindex');
 $queue[] = new IpAddress();
@@ -65,7 +66,7 @@ $queue[] = function (ServerRequest $request, RequestHandler $handler) use ($http
         return $http->createResponse(302)->withHeader('Location', $gen->generate('terms')); //利用規約に飛ばす
     }
 
-    return $handler->handle($request);
+    return $handler->handle($request); //リクエストをハンドラに渡す
 };
 
 //psrに則ったやつ
@@ -73,9 +74,11 @@ $queue[] = fn (ServerRequest $request): HttpResponse
 => $container->call($router->getMatcher()->match($request)->handler ?? $_404, [
     'request' => $request,
 ]);
+// call(,)
 
 //psr15ハンドラ
 $relay = new Relay($queue);
-$response = $relay->handle($server_request);
+$response = $relay->handle($server_request); //ここでハンドラに渡す
 
+//最終的にはこれがindex.phpで出される
 $container->get(Emitter::class)->emit($response);
