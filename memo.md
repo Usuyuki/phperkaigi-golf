@@ -83,6 +83,55 @@ twig template
 
 > scheme→ 構造という意味
 
+# Atlas
+
+DB を Eloquent の用に操作できるライブラリ
+
+# 用語
+
+## ハンドラ
+
+> 何かを扱おうとした時に、それを行いやすくしてくれるものの「総称」
+
+## ディスパッチャ
+
+> 処理待ちのデータやプロセスに対して必要な資源の振り分けや割り当て、適切な受け入れ先への引き渡しを行うプログラム
+
+ロードバランサと同じ意味？
+
 # php-playground
 
 golf 用のライブラリ？
+実行環境を作る的な
+
+psr15 のハンドラを用いてリクエスを受け取る  
+index.php 80
+↓  
+ヘッダー出力  
+index.php 51
+↓  
+PSR15 の図(バームクーヘンみたいなもの)の外側の Middleware の処理  
+ip アドレスなど  
+↓
+PSR17 の ServerRequestInterface などを DI してハンドラに渡す  
+Dispatcher.php 45  
+↓  
+セッションに書き込み
+SessionSetter.php 41  
+↓  
+URL を見て、問題ないか確認。問題あれば利用規約にリダイレクト ← これも middleware？
+index.php 69  
+↓  
+DI コンテナを呼ぶ(ハンドラが true なら返して、そうじゃなかったら 404 に)
+index.php 75  
+↓  
+DI コンテナの謎の処理
+ライブラリ側  
+↓  
+DI に定義を追加して、Atlas インスタンスを生成(JSON 系の認証も使用(config.php))  
+Atlas を使って SQL を操作  
+di.php 78  
+↓  
+エラー発生  
+Undefined array key 0  
+→ 配列のキーが未定義

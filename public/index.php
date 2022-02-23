@@ -76,7 +76,7 @@ $queue[] = fn (ServerRequest $request): HttpResponse
 ]);
 // call(,)
 
-//psr15ハンドラ
+//Relay→psr15ハンドラ
 $relay = new Relay($queue);
 $response = $relay->handle($server_request); //ここでハンドラに渡す
 
