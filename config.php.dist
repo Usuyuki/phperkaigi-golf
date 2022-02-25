@@ -1,22 +1,28 @@
 <?php
 
 use function DI\factory;
+
+use DI\Container;
 use Jose\Component\Core\JWK;
 use Jose\Component\KeyManagement\JWKFactory;
+use Playground\File;
+use Playground\Web\FileFactory;
+
 
 return [
     'use_https' => false,
     'cookie_name' => 'phppg-test',
-        'sandbox_php_defines' => [],
+    'sandbox_dir' => __DIR__ . '/tmp',
+    'sandbox_timeout' => 3600,
+    'sandbox_php_defines' => [],
+    'sandbox_ini' => __DIR__ . '/php-cli.ini',
     'is_production' => false,
-      'sandbox_ini' => __DIR__ . '/php-cli.ini',
     'jose.issuers' => [
         'issuers' => '',
     ],
     'atlas' => [
         // @see https://www.php.net/manual/ja/pdo.connections.php
-        // 'pdo' => ['mysql:host=localhost;dbname=phppg-test', 'phppg', 'P455w0Rd'],
-        'pdo' => [],
+        'pdo' => ['mysql:host=localhost;dbname=phppgtest', 'phppg', 'P455w0Rd'],
     ],
     JWK::class => factory(function (): JWK {
         return JWKFactory::createOctKey(
@@ -26,5 +32,11 @@ return [
                 'use' => 'sig'    // This key is used for signature/verification operations only
             ]
         );
+    }),
+    FileFactory::class => factory(function (Container $c): FileFactory {
+        $directory = $c->get('sandbox_dir');
+        return new FileFactory(File::class, function (string $prefix) use ($directory): string {
+            return tempnam($prefix, $directory);
+        });
     }),
 ];
