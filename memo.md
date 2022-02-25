@@ -135,3 +135,7 @@ di.php 78
 エラー発生  
 Undefined array key 0  
 → 配列のキーが未定義
+
+PSR17 の HTTP factory というのは PSR7 定義の HTTP オブジェクトを作る的な形ですが、factory ということでテストデータを作るものだと勝手に誤解していましたが、
+
+https://github.com/Usuyuki/phperkaigi-golf

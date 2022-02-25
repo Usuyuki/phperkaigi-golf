@@ -7,7 +7,9 @@ use Jose\Component\KeyManagement\JWKFactory;
 return [
     'use_https' => false,
     'cookie_name' => 'phppg-test',
+        'sandbox_php_defines' => [],
     'is_production' => false,
+      'sandbox_ini' => __DIR__ . '/php-cli.ini',
     'jose.issuers' => [
         'issuers' => '',
     ],
